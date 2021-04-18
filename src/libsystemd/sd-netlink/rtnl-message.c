@@ -5,6 +5,7 @@
 #include <linux/if_addrlabel.h>
 #include <linux/if_bridge.h>
 #include <linux/nexthop.h>
+#include <linux/pkt_sched.h>
 #include <stdbool.h>
 #include <unistd.h>
 
@@ -1139,6 +1140,72 @@ int sd_rtnl_message_new_mdb(sd_netlink *rtnl, sd_netlink_message **ret, uint16_t
         bpm = NLMSG_DATA((*ret)->hdr);
         bpm->family = AF_BRIDGE;
         bpm->ifindex = mdb_ifindex;
+
+        return 0;
+}
+
+int sd_rtnl_message_new_tfilter(sd_netlink *rtnl, sd_netlink_message **ret, uint16_t nlmsg_type, int tcm_ifindex) {
+        struct tcmsg *tcm;
+        int r;
+
+        assert_return(rtnl_message_type_is_tfilter(nlmsg_type), -EINVAL);
+        assert_return(ret, -EINVAL);
+
+        r = message_new(rtnl, ret, nlmsg_type);
+        if (r < 0)
+                return r;
+
+        if (nlmsg_type == RTM_NEWTFILTER)
+                (*ret)->hdr->nlmsg_flags |= NLM_F_CREATE | NLM_F_EXCL;
+
+        tcm = NLMSG_DATA((*ret)->hdr);
+        tcm->tcm_family = AF_UNSPEC;
+        tcm->tcm_ifindex = tcm_ifindex;
+
+        return 0;
+}
+
+int sd_rtnl_message_set_tfilter_parent(sd_netlink_message *m, uint32_t parent) {
+        struct tcmsg *tcm;
+
+        assert_return(rtnl_message_type_is_tfilter(m->hdr->nlmsg_type), -EINVAL);
+
+        tcm = NLMSG_DATA(m->hdr);
+        tcm->tcm_parent = parent;
+
+        return 0;
+}
+
+int sd_rtnl_message_set_tfilter_handle(sd_netlink_message *m, uint32_t handle) {
+        struct tcmsg *tcm;
+
+        assert_return(rtnl_message_type_is_tfilter(m->hdr->nlmsg_type), -EINVAL);
+
+        tcm = NLMSG_DATA(m->hdr);
+        tcm->tcm_handle = handle;
+
+        return 0;
+}
+
+int sd_rtnl_message_set_tfilter_priority(sd_netlink_message *m, uint16_t priority) {
+        uint32_t prio = priority;
+        struct tcmsg *tcm;
+
+        assert_return(rtnl_message_type_is_tfilter(m->hdr->nlmsg_type), -EINVAL);
+
+        tcm = NLMSG_DATA(m->hdr);
+        tcm->tcm_info |= TC_H_MAKE(prio << 16, 0);
+
+        return 0;
+}
+
+int sd_rtnl_message_set_tfilter_protocol(sd_netlink_message *m, uint16_t protocol) {
+        struct tcmsg *tcm;
+
+        assert_return(rtnl_message_type_is_tfilter(m->hdr->nlmsg_type), -EINVAL);
+
+        tcm = NLMSG_DATA(m->hdr);
+        tcm->tcm_info |= TC_H_MAKE(0, htons(protocol));
 
         return 0;
 }

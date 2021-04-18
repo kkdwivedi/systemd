@@ -1071,6 +1071,9 @@ static const NLType rtnl_types[] = {
         [RTM_NEWMDB]       = { .type = NETLINK_TYPE_NESTED, .type_system = &rtnl_mdb_type_system, .size = sizeof(struct br_port_msg) },
         [RTM_DELMDB]       = { .type = NETLINK_TYPE_NESTED, .type_system = &rtnl_mdb_type_system, .size = sizeof(struct br_port_msg) },
         [RTM_GETMDB]       = { .type = NETLINK_TYPE_NESTED, .type_system = &rtnl_mdb_type_system, .size = sizeof(struct br_port_msg) },
+        [RTM_NEWTFILTER]   = { .type = NETLINK_TYPE_NESTED, .type_system = &rtnl_tca_type_system, .size = sizeof(struct tcmsg) },
+        [RTM_DELTFILTER]   = { .type = NETLINK_TYPE_NESTED, .type_system = &rtnl_tca_type_system, .size = sizeof(struct tcmsg) },
+        [RTM_GETTFILTER]   = { .type = NETLINK_TYPE_NESTED, .type_system = &rtnl_tca_type_system, .size = sizeof(struct tcmsg) },
 };
 
 const NLTypeSystem rtnl_type_system_root = {

@@ -163,6 +163,8 @@ sources = files('''
         tc/tc.h
         tc/tclass.c
         tc/tclass.h
+        tc/tfilter.c
+        tc/tfilter.h
         tc/teql.c
         tc/teql.h
 '''.split())
