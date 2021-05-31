@@ -93,6 +93,9 @@ TFilter *tfilter_free(TFilter *tfilter) {
         if (!tfilter)
                 return NULL;
 
+        if (TFILTER_VTABLE(tfilter)->destroy)
+                TFILTER_VTABLE(tfilter)->destroy(tfilter);
+
         if (tfilter->network && tfilter->section)
                 ordered_hashmap_remove(tfilter->network->tc_by_section, tfilter->section);
 

@@ -10,6 +10,8 @@
  * police
  */
 
+/* Extend bpf_program to load BPF_PROG_TYPE_SCHED_CLS */
+
 typedef struct TFilterBPF {
         TFilter meta;
 

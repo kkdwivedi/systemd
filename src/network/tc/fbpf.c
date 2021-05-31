@@ -59,6 +59,17 @@ static int bpf_tfilter_fill_message(Link *link, TFilter *tfilter, sd_netlink_mes
         return 0;
 }
 
+static void bpf_tfilter_destroy(TFilter *tfilter) {
+        TFilterBPF *tfbpf;
+
+        assert(tfilter);
+
+        tfbpf = TFILTER_TO_BPF(tfilter);
+
+        /* Destroy bpf object */
+        return;
+}
+
 int config_parse_bpf_tfilter_bool(
         const char *unit,
         const char *filename,
@@ -121,4 +132,5 @@ const TFilterVTable bpf_tfilter_vtable = {
         .tca_kind = "bpf",
         .fill_message = bpf_tfilter_fill_message,
         .init = bpf_tfilter_init,
+        .destroy = bpf_tfilter_destroy,
 };

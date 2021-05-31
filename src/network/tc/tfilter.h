@@ -45,6 +45,7 @@ typedef struct TFilterVTable {
         int (*init)(TFilter *tfilter);
         int (*fill_message)(Link *link, TFilter *tfilter, sd_netlink_message *m);
         int (*verify)(TFilter *tfilter);
+        void (*destroy)(TFilter *tfilter);
 } TFilterVTable;
 
 extern const TFilterVTable * const tfilter_vtable[_TFILTER_KIND_MAX];
