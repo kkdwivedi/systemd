@@ -171,6 +171,8 @@ sources = files('''
         tc/tclass.h
         tc/teql.c
         tc/teql.h
+        tc/tfilter.c
+        tc/tfilter.h
 '''.split())
 
 systemd_networkd_sources = files('networkd.c')
@@ -223,6 +225,7 @@ libnetworkd_core = static_library(
         'networkd-core',
         sources,
         include_directories : network_includes,
+        dependencies : [libm],
         link_with : [networkd_link_with])
 
 if conf.get('ENABLE_NETWORKD') == 1

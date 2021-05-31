@@ -1,11 +1,16 @@
 /* SPDX-License-Identifier: LGPL-2.1-or-later
  * Copyright © 2019 VMware, Inc. */
 
+#include <linux/if_ether.h>
+#include <linux/pkt_sched.h>
+#include <math.h>
+
 #include "alloc-util.h"
 #include "extract-word.h"
 #include "fileio.h"
 #include "parse-util.h"
 #include "percent-util.h"
+#include "string-util.h"
 #include "tc-util.h"
 #include "time-util.h"
 
@@ -129,5 +134,102 @@ int parse_handle(const char *t, uint32_t *ret) {
                 return r;
 
         *ret = ((uint32_t) major << 16) | minor;
+        return 0;
+}
+
+#define X(p, n) { ETH_P_##p, #n }
+static const struct {
+        int id;
+        const char *name;
+} proto_name_to_id[] = {
+        /* start with most common three options */
+        X(ALL, all),
+        X(IP, ip),
+        X(IP, ipv4),
+        X(LOOP, loop),
+        X(PUP, pup),
+        X(PUPAT, pupat),
+        X(X25, x25),
+        X(ARP, arp),
+        X(BPQ, bpq),
+        X(IEEEPUP, ieeepup),
+        X(IEEEPUPAT, ieeepupat),
+        X(DEC, dec),
+        X(DNA_DL, dna_dl),
+        X(DNA_RC, dna_rc),
+        X(DNA_RT, dna_rt),
+        X(LAT, lat),
+        X(DIAG, diag),
+        X(CUST, cust),
+        X(SCA, sca),
+        X(RARP, rarp),
+        X(ATALK, atalk),
+        X(AARP, aarp),
+        X(IPX, ipx),
+        X(IPV6, ipv6),
+        X(PPP_DISC, ppp_disc),
+        X(PPP_SES, ppp_ses),
+        X(ATMMPOA, atmmpoa),
+        X(ATMFATE, atmfate),
+        X(802_3, 802_3),
+        X(AX25, ax25),
+        X(802_2, 802_2),
+        X(SNAP, snap),
+        X(DDCMP, ddcmp),
+        X(WAN_PPP, wan_ppp),
+        X(PPP_MP, ppp_mp),
+        X(LOCALTALK, localtalk),
+        X(CAN, can),
+        X(PPPTALK, ppptalk),
+        X(TR_802_2, tr_802_2),
+        X(MOBITEX, mobitex),
+        X(CONTROL, control),
+        X(IRDA, irda),
+        X(ECONET, econet),
+        X(TIPC, tipc),
+        X(AOE, aoe),
+        X(8021Q, 802.1Q),
+        X(8021AD, 802.1ad),
+        X(MPLS_UC, mpls_uc),
+        X(MPLS_MC, mpls_mc),
+        X(TEB, teb),
+        { 0x8100, "802.1Q" },
+        { 0x88cc, "LLDP" },
+};
+#undef X
+
+int parse_protocol(const char *t, uint16_t *ret) {
+        for (int i = 0; i < ELEMENTSOF(proto_name_to_id); i++) {
+                if (streq(proto_name_to_id[i].name, t)) {
+                        *ret = proto_name_to_id[i].id;
+                        return 0;
+                }
+        }
+
+        return -ENOENT;
+}
+
+/* copied from tc/tc_estimator.c GPL-2.0 */
+int parse_estimator(unsigned int interval, unsigned int time_const, struct tc_estimator *est) {
+        for (est->interval = 0; est->interval <= 5; est->interval++) {
+                if (interval <= (1 << est->interval) * (USEC_PER_SEC / 4))
+                        break;
+        }
+
+        if (est->interval > 5)
+                return -EINVAL;
+
+        est->interval -= 2;
+        for (est->ewma_log = 1; est->ewma_log < 32; est->ewma_log++) {
+                double w = 1.0 - 1.0 / (1 << est->ewma_log);
+
+                if (interval / (-log(w)) > time_const)
+                        break;
+        }
+
+        est->ewma_log--;
+        if (est->ewma_log == 0 || est->ewma_log >= 31)
+                return -EINVAL;
+
         return 0;
 }

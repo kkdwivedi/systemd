@@ -4,6 +4,7 @@
 #include "qdisc.h"
 #include "tc.h"
 #include "tclass.h"
+#include "tfilter.h"
 
 void traffic_control_free(TrafficControl *tc) {
         if (!tc)
@@ -15,6 +16,9 @@ void traffic_control_free(TrafficControl *tc) {
                 break;
         case TC_KIND_TCLASS:
                 tclass_free(TC_TO_TCLASS(tc));
+                break;
+        case TC_KIND_FILTER:
+                tfilter_free(TC_TO_FILTER(tc));
                 break;
         default:
                 assert_not_reached("Invalid traffic control type");
@@ -30,6 +34,8 @@ static int traffic_control_configure(Link *link, TrafficControl *tc) {
                 return qdisc_configure(link, TC_TO_QDISC(tc));
         case TC_KIND_TCLASS:
                 return tclass_configure(link, TC_TO_TCLASS(tc));
+        case TC_KIND_FILTER:
+                return tfilter_configure(link, TC_TO_FILTER(tc));
         default:
                 assert_not_reached("Invalid traffic control type");
         }
@@ -71,6 +77,8 @@ static int traffic_control_section_verify(TrafficControl *tc, bool *qdisc_has_ro
                 return qdisc_section_verify(TC_TO_QDISC(tc), qdisc_has_root, qdisc_has_clsact);
         case TC_KIND_TCLASS:
                 return tclass_section_verify(TC_TO_TCLASS(tc));
+        case TC_KIND_FILTER:
+                return tfilter_section_verify(TC_TO_FILTER(tc));
         default:
                 assert_not_reached("Invalid traffic control type");
         }

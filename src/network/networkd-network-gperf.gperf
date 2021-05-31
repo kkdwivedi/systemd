@@ -30,6 +30,7 @@ _Pragma("GCC diagnostic ignored \"-Wimplicit-fallthrough\"")
 #include "qdisc.h"
 #include "tclass.h"
 #include "vlan-util.h"
+#include "tfilter.h"
 %}
 struct ConfigPerfItem;
 %null_strings
@@ -521,3 +522,46 @@ FairQueueingControlledDelay.MemoryLimit,     config_parse_fair_queueing_controll
 FairQueueingControlledDelay.Quantum,         config_parse_fair_queueing_controlled_delay_size,         QDISC_KIND_FQ_CODEL,           0
 TokenBucketFilter.Burst,                     config_parse_token_bucket_filter_size,                    QDISC_KIND_TBF,                0
 TokenBucketFilter.LimitSize,                 config_parse_token_bucket_filter_size,                    QDISC_KIND_TBF,                0
+TrafficControlFilterBPF.Parent,			config_parse_tfilter_parent,		               TFILTER_KIND_BPF,	      0
+TrafficControlFilterBPF.Handle,			config_parse_tfilter_handle,			       TFILTER_KIND_BPF,              0
+TrafficControlFilterBPF.Chain,			config_parse_tfilter_chain,			       TFILTER_KIND_BPF,              0
+TrafficControlFilterBPF.Priority,		config_parse_tfilter_priority,			       TFILTER_KIND_BPF,              0
+TrafficControlFilterBPF.Protocol,		config_parse_tfilter_protocol,			       TFILTER_KIND_BPF,              0
+TrafficControlFilterBPF.ClassId,		config_parse_tfilter_chain,			       TFILTER_KIND_BPF,              0
+TrafficControlFilterBPF.EstimatorInterval,	config_parse_tfilter_est_interval,		       TFILTER_KIND_BPF,              0
+TrafficControlFilterBPF.EstimatorTimeConst,	config_parse_tfilter_est_time_const,		       TFILTER_KIND_BPF,              0
+TrafficControlFilterBPF.DirectAction,		config_parse_bpf_tfilter_bool,			       TFILTER_KIND_BPF,	      0
+TrafficControlFilterBPF.SkipSoftware,		config_parse_bpf_tfilter_bool,			       TFILTER_KIND_BPF,	      0
+TrafficControlFilterBPF.SkipHardware,		config_parse_bpf_tfilter_bool,			       TFILTER_KIND_BPF,	      0
+TrafficControlFilterFlow.Parent,		config_parse_tfilter_parent,		               TFILTER_KIND_FLOW,	      0
+TrafficControlFilterFlow.Handle,		config_parse_tfilter_handle,			       TFILTER_KIND_FLOW,             0
+TrafficControlFilterFlow.Chain,			config_parse_tfilter_chain,			       TFILTER_KIND_FLOW,             0
+TrafficControlFilterFlow.Priority,		config_parse_tfilter_priority,			       TFILTER_KIND_FLOW,             0
+TrafficControlFilterFlow.Protocol,		config_parse_tfilter_protocol,			       TFILTER_KIND_FLOW,             0
+TrafficControlFilterFlow.ClassId,		config_parse_tfilter_chain,			       TFILTER_KIND_FLOW,             0
+TrafficControlFilterFlow.EstimatorInterval,	config_parse_tfilter_est_interval,		       TFILTER_KIND_FLOW,             0
+TrafficControlFilterFlow.EstimatorTimeConst,	config_parse_tfilter_est_time_const,		       TFILTER_KIND_FLOW,             0
+TrafficControlFilterFlower.Parent,		config_parse_tfilter_parent,		               TFILTER_KIND_FLOWER,	      0
+TrafficControlFilterFlower.Handle,		config_parse_tfilter_handle,			       TFILTER_KIND_FLOWER,           0
+TrafficControlFilterFlower.Chain,		config_parse_tfilter_chain,			       TFILTER_KIND_FLOWER,           0
+TrafficControlFilterFlower.Priority,		config_parse_tfilter_priority,			       TFILTER_KIND_FLOWER,           0
+TrafficControlFilterFlower.Protocol,		config_parse_tfilter_protocol,			       TFILTER_KIND_FLOWER,           0
+TrafficControlFilterFlower.ClassId,		config_parse_tfilter_chain,			       TFILTER_KIND_FLOWER,           0
+TrafficControlFilterFlower.EstimatorInterval,	config_parse_tfilter_est_interval,		       TFILTER_KIND_FLOWER,           0
+TrafficControlFilterFlower.EstimatorTimeConst,	config_parse_tfilter_est_time_const,		       TFILTER_KIND_FLOWER,           0
+TrafficControlFilterFw.Parent,			config_parse_tfilter_parent,		               TFILTER_KIND_FW,		      0
+TrafficControlFilterFw.Handle,			config_parse_tfilter_handle,			       TFILTER_KIND_FW,               0
+TrafficControlFilterFw.Chain,			config_parse_tfilter_chain,			       TFILTER_KIND_FW,               0
+TrafficControlFilterFw.Priority,		config_parse_tfilter_priority,			       TFILTER_KIND_FW,               0
+TrafficControlFilterFw.Protocol,		config_parse_tfilter_protocol,			       TFILTER_KIND_FW,               0
+TrafficControlFilterFw.ClassId,			config_parse_tfilter_chain,			       TFILTER_KIND_FW,               0
+TrafficControlFilterFw.EstimatorInterval,	config_parse_tfilter_est_interval,		       TFILTER_KIND_FW,               0
+TrafficControlFilterFw.EstimatorTimeConst,	config_parse_tfilter_est_time_const,		       TFILTER_KIND_FW,               0
+TrafficControlFilterU32.Parent,			config_parse_tfilter_parent,		               TFILTER_KIND_U32,	      0
+TrafficControlFilterU32.Handle,			config_parse_tfilter_handle,			       TFILTER_KIND_U32,              0
+TrafficControlFilterU32.Chain,			config_parse_tfilter_chain,			       TFILTER_KIND_U32,              0
+TrafficControlFilterU32.Priority,		config_parse_tfilter_priority,			       TFILTER_KIND_U32,              0
+TrafficControlFilterU32.Protocol,		config_parse_tfilter_protocol,			       TFILTER_KIND_U32,              0
+TrafficControlFilterU32.ClassId,		config_parse_tfilter_chain,			       TFILTER_KIND_U32,              0
+TrafficControlFilterU32.EstimatorInterval,	config_parse_tfilter_est_interval,		       TFILTER_KIND_U32,              0
+TrafficControlFilterU32.EstimatorTimeConst,	config_parse_tfilter_est_time_const,		       TFILTER_KIND_U32,              0

@@ -221,6 +221,12 @@ int sd_rtnl_message_new_tclass(sd_netlink *rtnl, sd_netlink_message **ret, uint1
 int sd_rtnl_message_set_tclass_parent(sd_netlink_message *m, uint32_t parent);
 int sd_rtnl_message_set_tclass_handle(sd_netlink_message *m, uint32_t handle);
 
+int sd_rtnl_message_new_tfilter(sd_netlink *rtnl, sd_netlink_message **ret, uint16_t nlmsg_type, int tcm_ifindex);
+int sd_rtnl_message_set_tfilter_parent(sd_netlink_message *m, uint32_t parent);
+int sd_rtnl_message_set_tfilter_handle(sd_netlink_message *m, uint32_t handle);
+int sd_rtnl_message_set_tfilter_priority(sd_netlink_message *m, uint16_t priority);
+int sd_rtnl_message_set_tfilter_protocol(sd_netlink_message *m, uint16_t protocol);
+
 int sd_rtnl_message_new_mdb(sd_netlink *rtnl, sd_netlink_message **ret, uint16_t nlmsg_type, int mdb_ifindex);
 
 /* nfnl */
