@@ -14,7 +14,9 @@
 #include "tc-util.h"
 #include "tfilter.h"
 
-const TFilterVTable *const tfilter_vtable[_TFILTER_KIND_MAX] = {};
+const TFilterVTable *const tfilter_vtable[_TFILTER_KIND_MAX] = {
+        [TFILTER_KIND_BPF] = &bpf_tfilter_vtable,
+};
 
 static int tfilter_new(TFilterKind kind, TFilter **ret) {
         _cleanup_(tfilter_freep) TFilter *tfilter = NULL;
