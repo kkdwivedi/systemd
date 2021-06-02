@@ -16,6 +16,7 @@
 
 const TFilterVTable *const tfilter_vtable[_TFILTER_KIND_MAX] = {
         [TFILTER_KIND_BPF] = &bpf_tfilter_vtable,
+        [TFILTER_KIND_FW] = &fw_tfilter_vtable,
 };
 
 static int tfilter_new(TFilterKind kind, TFilter **ret) {

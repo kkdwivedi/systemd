@@ -82,3 +82,4 @@ CONFIG_PARSER_PROTOTYPE(config_parse_tfilter_est_interval);
 CONFIG_PARSER_PROTOTYPE(config_parse_tfilter_est_time_const);
 
 #include "fbpf.h"
+#include "ffw.h"
